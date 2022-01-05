@@ -11,7 +11,7 @@
   "module": "dist/index.js",
   "private": false,
   "scripts": {
-    "build": "rm -rf dist && mkdir dist &&  babel src/components -d dist --copy-files",
+    "build": "rm -rf dist && mkdir dist &&  babel src/component -d dist --copy-files",
     "start": "react-scripts start",
     "test": "react-scripts test",
     "publishpatch": "npm version patch && npm publish"
