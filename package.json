@@ -8,7 +8,7 @@
     "tags",
     "autosuggest"
   ],
-  "module": "dist/components/index.js",
+  "module": "dist/index.js",
   "private": false,
   "scripts": {
     "build": "rm -rf dist && mkdir dist &&  babel src/components -d dist --copy-files",
