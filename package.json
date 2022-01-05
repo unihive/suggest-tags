@@ -23,7 +23,7 @@
   "scripts": {
     "start": "react-scripts start",
     "test": "react-scripts test",
-    "publishpatch": "npm run build && npm version patch && npm publish"
+    "publishpatch": "npm version patch && npm publish"
   },
   "eslintConfig": {
     "extends": [
