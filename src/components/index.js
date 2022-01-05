@@ -1,23 +1,5 @@
-import { forwardRef, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { StyledWrapper, StyledContainer, StyledInput, StyledListItem, StyledUnorderedList, StyledTag } from './styled'
-
-const RefedStyledInput = forwardRef(StyledInput)
-
-const Styles = () => (
-  <style>
-    {`
-    .__suggest_tags__ ul li:hover {
-      background: #eee;
-    }
-    .__suggest_tags__ button:after {
-      content: "✕";
-      color: #aaa;
-      margin-left: 8px;
-    }
-  `}
-  </style>
-)
 
 const
   ENTER = 'Enter',
@@ -143,7 +125,6 @@ const SuggestTags = (props) => {
 
   const addTag = (value) => {
     // if lowercase is true modify before adding
-    // if (lowercase) item = item.toLowerCase()
     if (lowercase) value = value.toLowerCase()
     const newSet = [...tags, value]
     setTags(newSet)
@@ -180,55 +161,52 @@ const SuggestTags = (props) => {
   }
 
   return (
-    <>
-      <Styles />
-      <StyledWrapper
-        className={`__suggest_tags__ ${classNames.wrapper}`}
-      >
-        {
-          tags.map((tag, i) => (
-            <StyledTag
-              className={classNames.tag}
-              onClick={() => removeTag(i)}
-              key={i}
-              title='Click to remove tag'
-            >{tag}</StyledTag>
-          ))
+    <div
+      className={classNames.wrapper}
+    >
+      {
+        tags.map((tag, i) => (
+          <button
+            className={classNames.tag}
+            onClick={() => removeTag(i)}
+            key={i}
+            title='Click to remove tag'
+          >{tag}</button>
+        ))
+      }
+      <div className={classNames.container}>
+        <input
+          className={classNames.input}
+          onKeyDown={handleKeyDown}
+          onKeyUp={hadnleKeyUp}
+          onKeyPress={onKeyPress}
+          ref={input}
+          autoComplete="off"
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          placeholder={placeholder}
+        />
+        {expanded && suggestions.length > 0 &&
+          <>
+            <ul className={classNames.ul}>
+              {
+                suggestions.map((item, i) => (
+                  <li
+                    key={i}
+                    onClick={e => addTag(item)}
+                    onMouseDown={handleSuggestionMouseDown}
+                    className={classNames.li}
+                  >
+                    {item}
+                  </li>
+                ))
+              }
+            </ul>
+            <style>{getStylesForActiveSuggestion(selectedSuggestionIndex)}</style>
+          </>
         }
-        <StyledContainer className={classNames.container}>
-          <RefedStyledInput
-            className={classNames.input}
-            onKeyDown={handleKeyDown}
-            onKeyUp={hadnleKeyUp}
-            onKeyPress={onKeyPress}
-            ref={input}
-            autoComplete="off"
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            placeholder={placeholder}
-          />
-          {expanded && suggestions.length > 0 &&
-            <>
-              <StyledUnorderedList className={classNames.ul}>
-                {
-                  suggestions.map((item, i) => (
-                    <StyledListItem
-                      key={i}
-                      onClick={e => addTag(item)}
-                      onMouseDown={handleSuggestionMouseDown}
-                      className={classNames.li}
-                    >
-                      {item}
-                    </StyledListItem>
-                  ))
-                }
-              </StyledUnorderedList>
-              <style>{getStylesForActiveSuggestion(selectedSuggestionIndex)}</style>
-            </>
-          }
-        </StyledContainer>
-      </StyledWrapper>
-    </>
+      </div>
+    </div>
   )
 }
 
