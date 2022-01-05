@@ -3,10 +3,29 @@
   "version": "0.1.14",
   "author": "unihive",
   "repository": "https://github.com/unihive/suggest-tags",
+  "keywords": [
+    "react",
+    "tags",
+    "autosuggest"
+  ],
   "main": "dist/index.js",
+  "module": "dist/index.js",
   "private": false,
   "babel": {
     "presets": [
+      [
+        "@babel/env",
+        {
+          "targets": {
+            "edge": "17",
+            "firefox": "60",
+            "chrome": "67",
+            "safari": "11.1"
+          },
+          "useBuiltIns": "usage",
+          "corejs": "3.6.5"
+        }
+      ],
       "@babel/preset-react"
     ]
   },
@@ -20,7 +39,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prepublish": "rm -rf dist && mkdir dist &&  babel src/components -d dist --copy-files"
+    "prepublish": "rm -rf dist && mkdir dist && NODE_ENV=production babel src/components -d dist --copy-files"
   },
   "eslintConfig": {
     "extends": [
