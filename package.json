@@ -8,20 +8,10 @@
     "tags",
     "autosuggest"
   ],
-  "module": "src/components/index.js",
+  "module": "dist/components/index.js",
   "private": false,
-  "babel": {
-    "presets": [
-      "@babel/preset-react"
-    ]
-  },
-  "dependencies": {
-    "prop-types": "^15.8.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
   "scripts": {
-    "build": "react-scripts build",
+    "build": "rm -rf dist && mkdir dist &&  babel src/components -d dist --copy-files",
     "start": "react-scripts start",
     "test": "react-scripts test",
     "publishpatch": "npm version patch && npm publish"
@@ -43,6 +33,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-react"
+    ]
+  },
+  "dependencies": {
+    "prop-types": "^15.8.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.7",
