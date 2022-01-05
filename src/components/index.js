@@ -1,16 +1,33 @@
-import { useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import styles from './styles.module.css'
+import { StyledWrapper, StyledContainer, StyledInput, StyledListItem, StyledUnorderedList, StyledTag } from './styled'
 
-const KEYS = {
-  ENTER: 'Enter',
-  TAB: 'Tab',
-  BACKSPACE: 'Backspace',
-  UP_ARROW: 'ArrowUp',
-  UP_ARROW_COMPAT: 'Up',
-  DOWN_ARROW: 'ArrowDown',
-  DOWN_ARROW_COMPAT: 'Down'
-}
+const RefedStyledInput = forwardRef(StyledInput)
+
+const Styles = () => (
+  <style>
+    {`
+    .__suggest_tags__ ul li:hover {
+      background: #eee;
+    }
+    .__suggest_tags__ button:after {
+      content: "✕";
+      color: #aaa;
+      margin-left: 8px;
+    }
+  `}
+  </style>
+)
+
+const
+  ENTER = 'Enter',
+  TAB = 'Tab',
+  BACKSPACE = 'Backspace',
+  UP_ARROW = 'ArrowUp',
+  UP_ARROW_COMPAT = 'Up',
+  DOWN_ARROW = 'ArrowDown',
+  DOWN_ARROW_COMPAT = 'Down'
+
 
 const SuggestTags = (props) => {
 
@@ -24,9 +41,16 @@ const SuggestTags = (props) => {
     onTagRemove = () => { },
     onTagAdd = () => { },
     onKeyPress = () => { },
-    placeholder = ''
+    placeholder = '',
+    classNames = {
+      wrapper: '',
+      container: '',
+      input: '',
+      ul: '',
+      li: '',
+      tag: ''
+    }
   } = props
-
 
   const maxSuggestionLength = props.maxSuggestionLength || suggestionsPool.length
   const [tags, setTags] = useState([])
@@ -42,7 +66,7 @@ const SuggestTags = (props) => {
     let value = e.target.value.trim()
 
     switch (e.key) {
-      case KEYS.ENTER || KEYS.TAB:
+      case ENTER || TAB:
         if (selectedSuggestionIndex > 0) {
           const item = suggestions[selectedSuggestionIndex - 1]
           addTag(item)
@@ -54,17 +78,17 @@ const SuggestTags = (props) => {
         }
         e.target.value = ''
         break
-      case KEYS.BACKSPACE:
+      case BACKSPACE:
         if (value === '') {
           removeTag(tags.length - 1)
         }
         break
-      case KEYS.UP_ARROW || KEYS.UP_ARROW_COMPAT:
+      case UP_ARROW || UP_ARROW_COMPAT:
         if (selectedSuggestionIndex > 0) {
           setSelectedSuggestionIndex(selectedSuggestionIndex - 1)
         }
         break
-      case KEYS.DOWN_ARROW || KEYS.DOWN_ARROW_COMPAT:
+      case DOWN_ARROW || DOWN_ARROW_COMPAT:
         if (selectedSuggestionIndex < suggestions.length) {
           setSelectedSuggestionIndex(selectedSuggestionIndex + 1)
         }
@@ -79,10 +103,10 @@ const SuggestTags = (props) => {
 
     // terminate early if keys are up or down
     const isUpOrDownKey =
-      e.key === KEYS.UP_ARROW ||
-      e.key === KEYS.UP_ARROW_COMPAT ||
-      e.key === KEYS.DOWN_ARROW ||
-      e.key === KEYS.DOWN_ARROW_COMPAT
+      e.key === UP_ARROW ||
+      e.key === UP_ARROW_COMPAT ||
+      e.key === DOWN_ARROW ||
+      e.key === DOWN_ARROW_COMPAT
     if (isUpOrDownKey)
       return
 
@@ -149,56 +173,62 @@ const SuggestTags = (props) => {
     }))
   }
 
-  const getStylesForActiveSuggestion = () => {
+  const getStylesForActiveSuggestion = (index) => {
     return `
-      .${styles.suggestions} li:nth-child(${selectedSuggestionIndex}) {background: #b7cfe0;}
+      .__suggest_tags__ li:nth-child(${index}) {background: #b7cfe0;}
     `
   }
 
   return (
-    <div
-      className={styles.wrapper}
-    >
-      {
-        tags.map((tag, i) => (
-          <button
-            className={styles.tag}
-            onClick={() => removeTag(i)}
-            key={i}
-            title="Click to remove tag"
-          >{tag}</button>
-        ))
-      }
-      <div className={styles.container}>
-        <input
-          className={styles.input}
-          onKeyDown={handleKeyDown}
-          onKeyUp={hadnleKeyUp}
-          onKeyPress={onKeyPress}
-          ref={input}
-          autoComplete="off"
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          placeholder={placeholder}
-        />
-        {expanded && suggestions.length > 0 &&
-          <>
-            <ul className={styles.suggestions}>
-              {
-                suggestions.map((item, i) => (
-                  <li
-                    key={i}
-                    onClick={e => addTag(item)}
-                    onMouseDown={handleSuggestionMouseDown}
-                  >{item}</li>
-                ))
-              }
-            </ul>
-            <style type="text/css">{getStylesForActiveSuggestion()}</style>
-          </>
+    <>
+      <Styles />
+      <StyledWrapper
+        className={`__suggest_tags__ ${classNames.wrapper}`}
+      >
+        {
+          tags.map((tag, i) => (
+            <StyledTag
+              className={classNames.tag}
+              onClick={() => removeTag(i)}
+              key={i}
+              title='Click to remove tag'
+            >{tag}</StyledTag>
+          ))
         }
-      </div>
-    </div >
+        <StyledContainer className={classNames.container}>
+          <RefedStyledInput
+            className={classNames.input}
+            onKeyDown={handleKeyDown}
+            onKeyUp={hadnleKeyUp}
+            onKeyPress={onKeyPress}
+            ref={input}
+            autoComplete="off"
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            placeholder={placeholder}
+          />
+          {expanded && suggestions.length > 0 &&
+            <>
+              <StyledUnorderedList className={classNames.ul}>
+                {
+                  suggestions.map((item, i) => (
+                    <StyledListItem
+                      key={i}
+                      onClick={e => addTag(item)}
+                      onMouseDown={handleSuggestionMouseDown}
+                      className={classNames.li}
+                    >
+                      {item}
+                    </StyledListItem>
+                  ))
+                }
+              </StyledUnorderedList>
+              <style>{getStylesForActiveSuggestion(selectedSuggestionIndex)}</style>
+            </>
+          }
+        </StyledContainer>
+      </StyledWrapper>
+    </>
   )
 }
 
