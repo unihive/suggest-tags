@@ -8,7 +8,7 @@
     "tags",
     "autosuggest"
   ],
-  "module": "component/index.js",
+  "module": "src/component/index.js",
   "private": false,
   "babel": {
     "presets": [
