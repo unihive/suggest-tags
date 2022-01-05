@@ -8,7 +8,7 @@
     "tags",
     "autosuggest"
   ],
-  "module": "dist/index.js",
+  "module": "component/index.js",
   "private": false,
   "babel": {
     "presets": [
@@ -22,9 +22,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "rm -rf dist && mkdir dist && NODE_ENV=production babel src/components -d dist --copy-files",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "publishpatch": "npm run build && npm version patch && npm publish"
   },
   "eslintConfig": {
